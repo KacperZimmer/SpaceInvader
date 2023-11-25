@@ -12,7 +12,6 @@ int generateNumber(){
 
     std::uniform_int_distribution<int> dist(1, 10000);
     return dist(gen);
-
 }
 
 
@@ -21,7 +20,6 @@ Enemy::Enemy(){
 }
 Enemy::Enemy(float xPos, float yPos){
 
-    //constructor 
 
     this->text = LoadTexture("../sprites/spritesheet.png");
     this->xPos = xPos;
@@ -33,23 +31,21 @@ Enemy::Enemy(float xPos, float yPos){
 
 }
 
+float Enemy::bulletSpeed(){
 
-
-
-
-float Enemy::changePlayerTrajectory(){
-    return this->bulletDistance += 10;
+    bulletDistance += 10;
+    return bulletDistance;
 }
 
 void Enemy::bulletMove(){
-    bullet->setYPos(changePlayerTrajectory());
+    bullet->setYPos(bulletSpeed());
 }
 
 void Enemy::shootingAction(){
     if (generateNumber() >= 9970 && shootReady){
-        this->shouldDisplayBulletTxt = true;
         this->shootReady = false;
         this->bullet = std::make_unique<Bullet>(this->xPos, this->yPos + 30);
+        bulletDistance = this->yPos + 30;
     }
 
 }
@@ -106,8 +102,6 @@ void Enemy::frameUpdate() {
 
 
 void Enemy::Render(){
-
-
 
     this->shootingAction();
     frameUpdate();

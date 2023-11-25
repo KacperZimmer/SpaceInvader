@@ -7,9 +7,7 @@
 
 
 class GamePanel{
-    /*
-        GamePanel class provides functionallity  ? 
-    */
+ 
     private:
 
         static void prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy);

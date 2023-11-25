@@ -11,7 +11,7 @@ MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
     width = (texture.width) / scaleVector;
     xPos = x;
     yPos = y;
-    showRectangle = false; 
+    showRectangle = false;
 }
 
 Rectangle MainPlayer::calcDestRect() {

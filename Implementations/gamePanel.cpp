@@ -42,18 +42,27 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
 }
 
 void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
-    int vectorSense{1};
-    
+    static int vectorSense{1};
+    float currentXpos{};
+    float currentYpos{};
     for(auto& row : enemyMatrix){
         for(auto& enemy : row){
             if(enemy){
-                float currentXpos = enemy->getxPos(); 
-                currentXpos += vectorSense; 
-                enemy->setXPos(currentXpos); 
+                //TODO make move xDirection and yDirection functions
+
+                currentXpos = enemy->getxPos();
+                currentXpos += vectorSense;
+                enemy->setXPos(currentXpos);
+
+                currentYpos = enemy->getYPos();
+                currentYpos += 0.3f;
+                enemy->setYPos(currentYpos);
+
             }
         }
     }
-    if(isEnemyMatrixOutOfBound(2,enemyMatrix)) vectorSense *= -1; 
+
+    if(isEnemyMatrixOutOfBound(2,enemyMatrix)) vectorSense *= -1;
 
 }
 

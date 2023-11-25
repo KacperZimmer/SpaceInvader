@@ -20,14 +20,15 @@ private:
     const float timeToDrawFrame{1.f / 8.f}; 
     const int totalFramesToRender{2}; 
     float runningTime{0.f};
-    
+
+
     Texture2D text{}; 
     int currentFrame{1}; 
     void frameUpdate(); 
     void shootingAction();
     void handleBulletLogic(); 
     void bulletMove(); 
-    float changePlayerTrajectory(); 
+    float bulletSpeed();
 
 
 public: 
