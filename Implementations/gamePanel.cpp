@@ -3,6 +3,8 @@
 #include <iostream>
 
 
+
+
 void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
 
     enemyMatrix.resize(numOfRows); 
@@ -19,8 +21,10 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
         for(auto& enemyInMatrix: row){
             if(enemyInMatrix && mainPlayer.bullet && CheckCollisionRecs(mainPlayer.bullet->calcDestRect(), enemyInMatrix->calcDestRect())){
                 mainPlayer.bullet.reset(); 
-                enemyInMatrix.reset(); 
-            
+                enemyInMatrix.reset();
+                --this->numberOfEnemiesInMatrix;
+                std::cout << numberOfEnemiesInMatrix << std::endl;
+
             }else if(enemyInMatrix){
                 enemyInMatrix->Render(); 
             }
@@ -55,7 +59,7 @@ void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
                 enemy->setXPos(currentXpos);
 
                 currentYpos = enemy->getYPos();
-                currentYpos += 0.3f;
+                currentYpos += 0.1f;
                 enemy->setYPos(currentYpos);
 
             }
@@ -93,4 +97,12 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
 
 
 
+}
+
+GamePanel::GamePanel(int numOfRows, int numOfCols) {
+    this->numberOfEnemiesInMatrix = numOfCols * numOfRows;
+}
+
+int GamePanel::getNumberOfEnemiesInMatrix() const {
+    return numberOfEnemiesInMatrix;
 }

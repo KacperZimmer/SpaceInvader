@@ -1,8 +1,6 @@
-#include "../Headers/constValues.h"
 #include "../Headers/enemy.h"
 #include "../Headers/MainPlayer.h"
 #include "../Headers/gamePanel.h"
-#include "../Headers/bullet.h"
 #include <memory>
 
 MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
@@ -43,14 +41,17 @@ float MainPlayer::ChangeBulletTrajectory(){
 
 void MainPlayer::handleBulletLogic(){
     
-    if (this->bullet && showRectangle && bullet->getYPos() > 0) {
+    if (this->bullet && bullet->getYPos() > 0) {
         bullet->setYPos(ChangeBulletTrajectory()); 
-        bullet->Render(); 
+        bullet->Render();
+
+
 
     }else{ 
-        shootReady = true; 
-        showRectangle = false; 
+        shootReady = true;
+        bullet.reset(); 
     }
+
 }
 void MainPlayer::handleMovementLogic(){
  DeltaTime = GetFrameTime(); 
