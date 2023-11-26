@@ -55,7 +55,7 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
         for(auto& enemySingle : row){
 
 
-            if(enemySingle && enemySingle->getxPos() > WIDTH - 55 || enemySingle && enemySingle->getxPos() < 0) return true;
+            if(enemySingle && enemySingle->getxPos() > WIDTH - 50 || enemySingle && enemySingle->getxPos() < 0) return true;
         }
     }
 
