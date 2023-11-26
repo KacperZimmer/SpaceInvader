@@ -111,5 +111,9 @@ void Enemy::Render(){
 
 }
 
+const std::unique_ptr<Bullet> &Enemy::getBullet() const {
+    return bullet;
+}
+
 
 

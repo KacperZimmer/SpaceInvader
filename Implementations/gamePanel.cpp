@@ -1,9 +1,18 @@
 #include "../Headers/gamePanel.h"
 #include "../Headers/constValues.h"
+#include "raylib.h"
 #include <iostream>
 
 
 
+bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
+
+    return CheckCollisionRecs(enemyRect, playerBulletRect);
+}
+
+bool detectCollisonWithEnemyBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
+    return CheckCollisionRecs(enemyRect, playerBulletRect);
+}
 
 void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
 
@@ -13,24 +22,29 @@ void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& 
         enemyMatrix[i].resize(numOfEnemy); 
     }
 
-
 }
-void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, MainPlayer& mainPlayer){
+void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, MainPlayer& mainPlayer) {
+    for (auto& row : enemyMatrix) {
+        for (auto& enemyInMatrix : row) {
 
-    for(auto& row: enemyMatrix){
-        for(auto& enemyInMatrix: row){
-            if(enemyInMatrix && mainPlayer.bullet && CheckCollisionRecs(mainPlayer.bullet->calcDestRect(), enemyInMatrix->calcDestRect())){
-                mainPlayer.bullet.reset(); 
+            if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
+                mainPlayer.getBullet().reset();
                 enemyInMatrix.reset();
                 --this->numberOfEnemiesInMatrix;
-                std::cout << numberOfEnemiesInMatrix << std::endl;
 
-            }else if(enemyInMatrix){
-                enemyInMatrix->Render(); 
+            } else if (enemyInMatrix) {
+                enemyInMatrix->Render();
             }
+
+            if(enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
+                this->shouldTerminate = true;
+                std::cout << shouldTerminate << std::endl;
+            }
+
         }
     }
 }
+
 
 bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<std::unique_ptr<Enemy>>>& enemy){
 
@@ -86,7 +100,6 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
 
             row.emplace_back(std::make_unique<Enemy>(xPos, yPos));
             xPos += enemy.getWidth();
-            std::cout << enemy.getWidth() << std::endl; 
 
         }
 
@@ -105,4 +118,8 @@ GamePanel::GamePanel(int numOfRows, int numOfCols) {
 
 int GamePanel::getNumberOfEnemiesInMatrix() const {
     return numberOfEnemiesInMatrix;
+}
+
+bool GamePanel::isShouldTerminate() const {
+    return shouldTerminate;
 }

@@ -5,7 +5,6 @@ const int WIDTH{600};
 const int HEIGHT{700};
 const int MIDDLEXPOS{WIDTH /2}; 
 const int MIDDLEYPOS{HEIGHT / 2};
-const float ENEMYWIDTH{}; 
-const float ENEMYHEIGHT{}; 
-const float ENEMYTXTSCALE{14}; 
+const float ENEMYTXTSCALE{14};
+
 #endif

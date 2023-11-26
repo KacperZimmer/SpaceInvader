@@ -9,22 +9,23 @@
 class MainPlayer : public Character{
 private: 
     const int mainPlayerVelocity{250}; 
-    bool showRectangle{false}; 
-    bool shootReady{true}; 
+    bool shootReady{true};
     float bulletDistance{};
-    float SetBulletTrajectory();
     float ChangeBulletTrajectory();
     void handleBulletLogic(); 
-    void handleMovementLogic(); 
-public: 
+    void handleMovementLogic();
+    std::unique_ptr<Bullet> bullet{nullptr};
 
-    std::unique_ptr<Bullet> bullet{nullptr}; 
-    static const int scaleVector{4}; 
+public:
 
-    MainPlayer(Texture2D texture, float x, float y); 
-    virtual void Render() override; 
-    virtual Rectangle calcDestRect() override; 
-    virtual Rectangle calcSourceRect() override; 
+    static const int scaleVector{4};
+
+    MainPlayer(Texture2D texture, float x, float y);
+    std::unique_ptr<Bullet> &getBullet() ;
+
+    void Render() override;
+    Rectangle calcDestRect() override;
+    Rectangle calcSourceRect() override;
 
 };
 
