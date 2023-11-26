@@ -1,6 +1,6 @@
 #include <vector>
 #include "MainPlayer.h"
-#include "../Headers/enemy.h"
+#include "../include//enemy.h"
 
 #ifndef GAMEPANEL_H
 #define GAMEPANEL_H
