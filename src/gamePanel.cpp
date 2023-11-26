@@ -3,7 +3,16 @@
 #include "raylib.h"
 #include <iostream>
 
-
+void moveYDirection(std::unique_ptr<Enemy>& enemy, float vectorDirection){
+    float currentYPos = enemy->getYPos();
+    currentYPos += vectorDirection;
+    enemy->setYPos(currentYPos);
+}
+void moveXDirection(std::unique_ptr<Enemy>& enemy, float fallingSpeed){
+    float currentXpos = enemy->getxPos();
+    currentXpos += fallingSpeed;
+    enemy->setXPos(currentXpos);
+}
 
 bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
 
@@ -25,7 +34,9 @@ void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& 
     }
 
 }
+
 void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, MainPlayer& mainPlayer) {
+
     for (auto& row : enemyMatrix) {
         for (auto& enemyInMatrix : row) {
 
@@ -42,7 +53,6 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
 
                 this->shouldTerminate = true;
             }
-
         }
     }
 }
@@ -54,7 +64,6 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
     for(auto& row : enemy){
         for(auto& enemySingle : row){
 
-
             if(enemySingle && enemySingle->getxPos() > WIDTH - 50 || enemySingle && enemySingle->getxPos() < 0) return true;
         }
     }
@@ -64,35 +73,25 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
 
 void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
     static int vectorSense{1};
-    float currentXpos{};
-    float currentYpos{};
+
     for(auto& row : enemyMatrix){
         for(auto& enemy : row){
+
             if(enemy){
-                //TODO make move xDirection and yDirection functions
-
-                currentXpos = enemy->getxPos();
-                currentXpos += vectorSense;
-                enemy->setXPos(currentXpos);
-
-                currentYpos = enemy->getYPos();
-                currentYpos += 0.1f;
-                enemy->setYPos(currentYpos);
-
+                moveXDirection(enemy,vectorSense);
+                moveYDirection(enemy, 0.1f);
             }
         }
     }
-
     if(isEnemyMatrixOutOfBound(2,enemyMatrix)) vectorSense *= -1;
-
 }
 
 void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, short numOfRows, short enemyNumber, float xPos, float yPos){
 
-    static float startingXPos{20}; 
+    this->numberOfEnemiesInMatrix = numOfRows * enemyNumber;
+    static float startingXPos{20};
 
-      
-    Enemy enemy(0.f,0.f); 
+    Enemy enemy(0.f,0.f);
     xPos += startingXPos; 
 
     prepareMatrix(enemyMatrix, numOfRows,enemyNumber); 
@@ -103,16 +102,12 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
 
             row.emplace_back(std::make_unique<Enemy>(xPos, yPos));
             xPos += enemy.getWidth();
-
         }
 
         yPos += enemy.getHeight(); 
         xPos = startingXPos; 
         enemyMatrix[i] = std::move(row);
     }
-
-
-
 }
 
 GamePanel::GamePanel(int numOfRows, int numOfCols) {
@@ -123,6 +118,6 @@ int GamePanel::getNumberOfEnemiesInMatrix() const {
     return numberOfEnemiesInMatrix;
 }
 
-bool GamePanel::isShouldTerminate() const {
+bool GamePanel::ShouldTerminate() const {
     return shouldTerminate;
 }

@@ -20,10 +20,9 @@ void runGame(){
 
 
     std::vector<std::vector<std::unique_ptr<Enemy>>> enemyMatrix{};
-    int numRows = 5;
-    int numCols = 2;
+    int numRows = 1;
+    int numCols = 1;
 
-//    GamePanel::initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
 
     GamePanel gamePanel(numRows,numCols);
 
@@ -37,18 +36,15 @@ void runGame(){
 
         if(gamePanel.getNumberOfEnemiesInMatrix() == 0){
 
+            ++numCols;
 
+            if(numRows % 5 == 0 ){
+                ++numRows;
+            }
 
-//            DrawText("Hello")
-            char* textWinning = "YOU WON ! ";
-
-            DrawText(textWinning, MIDDLEXPOS - 50, MIDDLEYPOS, 20, GREEN);
-            EndDrawing();
-            sleep(5);
-
-            break;
+            gamePanel.initizeEnemy(enemyMatrix,numRows,numCols,0.f,0.f);
         }
-        if(gamePanel.isShouldTerminate()){
+        if(gamePanel.ShouldTerminate()){
             char* textLoosing = "YOU lost ! ";
 
             DrawText(textLoosing, MIDDLEXPOS - 50, MIDDLEYPOS, 20, RED);

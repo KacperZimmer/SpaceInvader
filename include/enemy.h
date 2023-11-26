@@ -35,7 +35,9 @@ public:
 public: 
     virtual Rectangle calcDestRect() override; 
     virtual Rectangle calcSourceRect() override; 
-    virtual void Render() override; 
+    virtual void Render() override;
+
+
     float getxPos(){
         return this->xPos; 
     }
