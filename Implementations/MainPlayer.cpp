@@ -1,8 +1,6 @@
-#include "../Headers/constValues.h"
 #include "../Headers/enemy.h"
 #include "../Headers/MainPlayer.h"
 #include "../Headers/gamePanel.h"
-#include "../Headers/bullet.h"
 #include <memory>
 
 MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
@@ -11,7 +9,6 @@ MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
     width = (texture.width) / scaleVector;
     xPos = x;
     yPos = y;
-    showRectangle = false;
 }
 
 Rectangle MainPlayer::calcDestRect() {
@@ -43,14 +40,15 @@ float MainPlayer::ChangeBulletTrajectory(){
 
 void MainPlayer::handleBulletLogic(){
     
-    if (this->bullet && showRectangle && bullet->getYPos() > 0) {
+    if (this->bullet && bullet->getYPos() > 0) {
         bullet->setYPos(ChangeBulletTrajectory()); 
-        bullet->Render(); 
+        bullet->Render();
 
     }else{ 
-        shootReady = true; 
-        showRectangle = false; 
+        shootReady = true;
+        bullet.reset();
     }
+
 }
 void MainPlayer::handleMovementLogic(){
  DeltaTime = GetFrameTime(); 
@@ -62,8 +60,7 @@ void MainPlayer::handleMovementLogic(){
     }
     
     if (IsKeyDown(KEY_SPACE) && shootReady) {
-        showRectangle = true; 
-        shootReady = false; 
+        shootReady = false;
         bulletDistance = yPos;
 
         bullet = std::make_unique<Bullet>(xPos + width/2.04f, yPos);
@@ -77,4 +74,8 @@ void MainPlayer::Render() {
     handleBulletLogic(); 
     DrawTexturePro(text, calcSourceRect(), calcDestRect(), Vector2{}, 0.f, WHITE);
     
+}
+
+ std::unique_ptr<Bullet> &MainPlayer::getBullet() {
+    return bullet;
 }

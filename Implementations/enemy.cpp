@@ -8,8 +8,7 @@
 
 std::mt19937 gen(std::random_device{}());
 
-int generateNumber(){
-
+    int generateNumber(){
     std::uniform_int_distribution<int> dist(1, 10000);
     return dist(gen);
 }
@@ -45,7 +44,7 @@ void Enemy::shootingAction(){
     if (generateNumber() >= 9970 && shootReady){
         this->shootReady = false;
         this->bullet = std::make_unique<Bullet>(this->xPos, this->yPos + 30);
-        bulletDistance = this->yPos + 30;
+        this->bulletDistance = this->yPos + 30;
     }
 
 }
@@ -56,7 +55,6 @@ void Enemy::handleBulletLogic(){
         this->bulletDistance = this->yPos;
         this->bullet.reset();
         this->shootReady = true;
-        this->shouldDisplayBulletTxt = false;
     }else{
         this->bulletMove();
         this->bullet->Render();
@@ -111,6 +109,10 @@ void Enemy::Render(){
         this->handleBulletLogic();
     }
 
+}
+
+const std::unique_ptr<Bullet> &Enemy::getBullet() const {
+    return bullet;
 }
 
 

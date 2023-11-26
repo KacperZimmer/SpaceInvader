@@ -13,11 +13,9 @@ private:
 
     std::unique_ptr<Bullet>bullet{nullptr};
     
-    const int scaleFactor{15}; 
-    bool shootReady{true}; 
-    float bulletDistance{}; 
-    bool shouldDisplayBulletTxt{false};
-    const float timeToDrawFrame{1.f / 8.f}; 
+    bool shootReady{true};
+    float bulletDistance{};
+    const float timeToDrawFrame{1.f / 8.f};
     const int totalFramesToRender{2}; 
     float runningTime{0.f};
 
@@ -29,6 +27,9 @@ private:
     void handleBulletLogic(); 
     void bulletMove(); 
     float bulletSpeed();
+
+public:
+    const std::unique_ptr<Bullet> &getBullet() const;
 
 
 public: 
