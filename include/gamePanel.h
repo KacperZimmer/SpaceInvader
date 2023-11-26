@@ -13,10 +13,8 @@ private:
     void prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy);
     bool isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<std::unique_ptr<Enemy>>>& enemy);
     bool shouldTerminate{false};
-
-
-private:
     int numberOfEnemiesInMatrix{};
+    Sound killedEnemy{};
 
 
 public:
@@ -30,7 +28,20 @@ public:
 
     int getNumberOfEnemiesInMatrix() const;
 
+
+    ~GamePanel(){
+
+            UnloadSound(this->killedEnemy);
+
+            CloseAudioDevice();
+
+
+
+    }
+
 };
+
+
 
 
 

@@ -43,8 +43,14 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
             if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
                 mainPlayer.getBullet().reset();
                 enemyInMatrix.reset();
-                --this->numberOfEnemiesInMatrix;
 
+                if(IsSoundReady(killedEnemy)) {
+                    PlaySound(this->killedEnemy);
+                }else{
+                    std::cout << "nie dziala" << std::endl;
+                }
+
+                --this->numberOfEnemiesInMatrix;
             } else if (enemyInMatrix) {
                 enemyInMatrix->Render();
             }
@@ -112,6 +118,11 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
 
 GamePanel::GamePanel(int numOfRows, int numOfCols) {
     this->numberOfEnemiesInMatrix = numOfCols * numOfRows;
+
+    InitAudioDevice();
+    this->killedEnemy = LoadSound("../sound/invaderkilled.wav");
+
+
 }
 
 int GamePanel::getNumberOfEnemiesInMatrix() const {
@@ -120,4 +131,9 @@ int GamePanel::getNumberOfEnemiesInMatrix() const {
 
 bool GamePanel::ShouldTerminate() const {
     return shouldTerminate;
+
+
 }
+
+
+

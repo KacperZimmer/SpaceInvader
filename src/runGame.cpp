@@ -36,20 +36,20 @@ void runGame(){
 
         if(gamePanel.getNumberOfEnemiesInMatrix() == 0){
 
-            ++numCols;
+            ++numRows;
 
             if(numRows % 5 == 0 ){
-                ++numRows;
+                ++numCols;
+
             }
 
-            gamePanel.initizeEnemy(enemyMatrix,numRows,numCols,0.f,0.f);
+
+            gamePanel.initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
         }
         if(gamePanel.ShouldTerminate()){
             char* textLoosing = "YOU lost ! ";
 
             DrawText(textLoosing, MIDDLEXPOS - 50, MIDDLEYPOS, 20, RED);
-
-
 
             EndDrawing();
             sleep(5);
