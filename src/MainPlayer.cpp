@@ -75,7 +75,6 @@ void MainPlayer::Render() {
     handleBulletLogic(); 
     DrawTexturePro(text, calcSourceRect(), calcDestRect(), Vector2{}, 0.f, WHITE);
 
-    std::cout << xPos << std::endl ;
 }
 
  std::unique_ptr<Bullet> &MainPlayer::getBullet() {

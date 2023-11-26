@@ -14,6 +14,7 @@ void moveXDirection(std::unique_ptr<Enemy>& enemy, float fallingSpeed){
     enemy->setXPos(currentXpos);
 }
 
+
 bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
 
     return CheckCollisionRecs(enemyRect, playerBulletRect);
@@ -43,10 +44,20 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
             if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
                 mainPlayer.getBullet().reset();
                 enemyInMatrix.reset();
-                --this->numberOfEnemiesInMatrix;
 
+                if(IsSoundReady(killedEnemy)) {
+                    PlaySound(this->killedEnemy);
+                }else{
+                    std::cout << "nie dziala" << std::endl;
+                }
+
+                --this->numberOfEnemiesInMatrix;
             } else if (enemyInMatrix) {
                 enemyInMatrix->Render();
+            }
+            else if(enemyInMatrix->getYPos() >= mainPlayer.getYPos()){
+                this->shouldTerminate = true;
+                std::cout << "koniec" << std::endl;
             }
 
             if(enemyInMatrix && enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
@@ -79,7 +90,7 @@ void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
 
             if(enemy){
                 moveXDirection(enemy,vectorSense);
-                moveYDirection(enemy, 0.1f);
+                moveYDirection(enemy, 1.f);
             }
         }
     }
@@ -110,8 +121,14 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
     }
 }
 
+
 GamePanel::GamePanel(int numOfRows, int numOfCols) {
     this->numberOfEnemiesInMatrix = numOfCols * numOfRows;
+
+    InitAudioDevice();
+    this->killedEnemy = LoadSound("../sound/invaderkilled.wav");
+
+
 }
 
 int GamePanel::getNumberOfEnemiesInMatrix() const {
@@ -120,4 +137,9 @@ int GamePanel::getNumberOfEnemiesInMatrix() const {
 
 bool GamePanel::ShouldTerminate() const {
     return shouldTerminate;
+
+
 }
+
+
+
