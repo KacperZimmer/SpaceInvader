@@ -1,8 +1,8 @@
 
-#include "../Headers/constValues.h"
-#include "../Headers/enemy.h"
-#include "../Headers/MainPlayer.h"
-#include "../Headers/gamePanel.h"
+#include "../include//constValues.h"
+#include "../include//enemy.h"
+#include "../include/MainPlayer.h"
+#include "../include//gamePanel.h"
 #include <unistd.h>
 #include <memory>
 #include "raylib.h"
@@ -20,10 +20,9 @@ void runGame(){
 
 
     std::vector<std::vector<std::unique_ptr<Enemy>>> enemyMatrix{};
-    int numRows = 3;
-    int numCols = 3;
+    int numRows = 1;
+    int numCols = 1;
 
-//    GamePanel::initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
 
     GamePanel gamePanel(numRows,numCols);
 
@@ -38,22 +37,21 @@ void runGame(){
         if(gamePanel.getNumberOfEnemiesInMatrix() == 0){
 
 
+            if(numRows % 5 == 0 ){
+                ++numCols;
 
-//            DrawText("Hello")
-            char* textWinning = "YOU WON ! ";
+            }else{
+                ++numRows;
 
-            DrawText(textWinning, MIDDLEXPOS - 50, MIDDLEYPOS, 20, GREEN);
-            EndDrawing();
-            sleep(5);
+            }
 
-            break;
+
+            gamePanel.initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
         }
-        if(gamePanel.isShouldTerminate()){
+        if(gamePanel.ShouldTerminate()){
             char* textLoosing = "YOU lost ! ";
 
             DrawText(textLoosing, MIDDLEXPOS - 50, MIDDLEYPOS, 20, RED);
-
-
 
             EndDrawing();
             sleep(5);

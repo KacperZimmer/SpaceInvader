@@ -1,8 +1,18 @@
-#include "../Headers/gamePanel.h"
-#include "../Headers/constValues.h"
+#include "../include/gamePanel.h"
+#include "../include//constValues.h"
 #include "raylib.h"
 #include <iostream>
 
+void moveYDirection(std::unique_ptr<Enemy>& enemy, float vectorDirection){
+    float currentYPos = enemy->getYPos();
+    currentYPos += vectorDirection;
+    enemy->setYPos(currentYPos);
+}
+void moveXDirection(std::unique_ptr<Enemy>& enemy, float fallingSpeed){
+    float currentXpos = enemy->getxPos();
+    currentXpos += fallingSpeed;
+    enemy->setXPos(currentXpos);
+}
 
 
 bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
@@ -12,7 +22,9 @@ bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBu
 
 bool detectCollisonWithEnemyBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
     return CheckCollisionRecs(enemyRect, playerBulletRect);
+
 }
+
 
 void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
 
@@ -23,24 +35,35 @@ void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& 
     }
 
 }
+
 void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, MainPlayer& mainPlayer) {
+
     for (auto& row : enemyMatrix) {
         for (auto& enemyInMatrix : row) {
 
             if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
                 mainPlayer.getBullet().reset();
                 enemyInMatrix.reset();
-                --this->numberOfEnemiesInMatrix;
 
+                if(IsSoundReady(killedEnemy)) {
+                    PlaySound(this->killedEnemy);
+                }else{
+                    std::cout << "nie dziala" << std::endl;
+                }
+
+                --this->numberOfEnemiesInMatrix;
             } else if (enemyInMatrix) {
                 enemyInMatrix->Render();
             }
-
-            if(enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
+            else if(enemyInMatrix->getYPos() >= mainPlayer.getYPos()){
                 this->shouldTerminate = true;
-                std::cout << shouldTerminate << std::endl;
+                std::cout << "koniec" << std::endl;
             }
 
+            if(enemyInMatrix && enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
+
+                this->shouldTerminate = true;
+            }
         }
     }
 }
@@ -51,8 +74,8 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
 
     for(auto& row : enemy){
         for(auto& enemySingle : row){
-            
-            if(enemySingle && enemySingle->getxPos() > WIDTH || enemySingle && enemySingle->getxPos() < 0) return true;
+
+            if(enemySingle && enemySingle->getxPos() > WIDTH - 50 || enemySingle && enemySingle->getxPos() < 0) return true;
         }
     }
 
@@ -61,35 +84,25 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
 
 void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
     static int vectorSense{1};
-    float currentXpos{};
-    float currentYpos{};
+
     for(auto& row : enemyMatrix){
         for(auto& enemy : row){
+
             if(enemy){
-                //TODO make move xDirection and yDirection functions
-
-                currentXpos = enemy->getxPos();
-                currentXpos += vectorSense;
-                enemy->setXPos(currentXpos);
-
-                currentYpos = enemy->getYPos();
-                currentYpos += 0.1f;
-                enemy->setYPos(currentYpos);
-
+                moveXDirection(enemy,vectorSense);
+                moveYDirection(enemy, 1.f);
             }
         }
     }
-
     if(isEnemyMatrixOutOfBound(2,enemyMatrix)) vectorSense *= -1;
-
 }
 
 void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, short numOfRows, short enemyNumber, float xPos, float yPos){
 
-    static float startingXPos{20}; 
+    this->numberOfEnemiesInMatrix = numOfRows * enemyNumber;
+    static float startingXPos{20};
 
-      
-    Enemy enemy(0.f,0.f); 
+    Enemy enemy(0.f,0.f);
     xPos += startingXPos; 
 
     prepareMatrix(enemyMatrix, numOfRows,enemyNumber); 
@@ -100,26 +113,33 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
 
             row.emplace_back(std::make_unique<Enemy>(xPos, yPos));
             xPos += enemy.getWidth();
-
         }
 
         yPos += enemy.getHeight(); 
         xPos = startingXPos; 
         enemyMatrix[i] = std::move(row);
     }
-
-
-
 }
+
 
 GamePanel::GamePanel(int numOfRows, int numOfCols) {
     this->numberOfEnemiesInMatrix = numOfCols * numOfRows;
+
+    InitAudioDevice();
+    this->killedEnemy = LoadSound("../sound/invaderkilled.wav");
+
+
 }
 
 int GamePanel::getNumberOfEnemiesInMatrix() const {
     return numberOfEnemiesInMatrix;
 }
 
-bool GamePanel::isShouldTerminate() const {
+bool GamePanel::ShouldTerminate() const {
     return shouldTerminate;
+
+
 }
+
+
+

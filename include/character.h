@@ -29,7 +29,9 @@ public:
     virtual void setHeight(float height); 
 
     virtual float getWidth() const; 
-    virtual float getHeight() const; 
+    virtual float getHeight() const;
+
+    virtual float getYPos() const;
 
 
     virtual ~Character(); 

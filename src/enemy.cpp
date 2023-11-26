@@ -2,9 +2,9 @@
 #include <iostream>
 #include <random>
 #include <memory>
-#include "../Headers/bullet.h"
-#include "../Headers/enemy.h"
-#include "../Headers/constValues.h"
+#include "../include//bullet.h"
+#include "../include//enemy.h"
+#include "../include//constValues.h"
 
 std::mt19937 gen(std::random_device{}());
 
