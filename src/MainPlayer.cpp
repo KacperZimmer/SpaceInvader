@@ -1,7 +1,8 @@
-#include "../Headers/enemy.h"
-#include "../Headers/MainPlayer.h"
-#include "../Headers/gamePanel.h"
+#include "../include//enemy.h"
+#include "../include//MainPlayer.h"
+#include "../include//gamePanel.h"
 #include <memory>
+#include <iostream>
 
 MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
     text = texture;
@@ -73,7 +74,8 @@ void MainPlayer::Render() {
     handleMovementLogic(); 
     handleBulletLogic(); 
     DrawTexturePro(text, calcSourceRect(), calcDestRect(), Vector2{}, 0.f, WHITE);
-    
+
+    std::cout << xPos << std::endl ;
 }
 
  std::unique_ptr<Bullet> &MainPlayer::getBullet() {
