@@ -9,7 +9,6 @@ MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
     width = (texture.width) / scaleVector;
     xPos = x;
     yPos = y;
-    showRectangle = false;
 }
 
 Rectangle MainPlayer::calcDestRect() {
@@ -45,11 +44,9 @@ void MainPlayer::handleBulletLogic(){
         bullet->setYPos(ChangeBulletTrajectory()); 
         bullet->Render();
 
-
-
     }else{ 
         shootReady = true;
-        bullet.reset(); 
+        bullet.reset();
     }
 
 }
@@ -63,8 +60,7 @@ void MainPlayer::handleMovementLogic(){
     }
     
     if (IsKeyDown(KEY_SPACE) && shootReady) {
-        showRectangle = true; 
-        shootReady = false; 
+        shootReady = false;
         bulletDistance = yPos;
 
         bullet = std::make_unique<Bullet>(xPos + width/2.04f, yPos);
@@ -78,4 +74,8 @@ void MainPlayer::Render() {
     handleBulletLogic(); 
     DrawTexturePro(text, calcSourceRect(), calcDestRect(), Vector2{}, 0.f, WHITE);
     
+}
+
+ std::unique_ptr<Bullet> &MainPlayer::getBullet() {
+    return bullet;
 }
