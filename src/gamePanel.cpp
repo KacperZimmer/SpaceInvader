@@ -1,22 +1,22 @@
 #include "../include/gamePanel.h"
-#include "../include//constValues.h"
+#include "../include/constValues.h"
 #include "raylib.h"
+#include "../include/runGame.h"
 #include <iostream>
 
-void moveYDirection(std::unique_ptr<Enemy>& enemy, float vectorDirection){
+void moveYDirection(std::unique_ptr<Enemy>& enemy, float fallingSpeed){
     float currentYPos = enemy->getYPos();
-    currentYPos += vectorDirection;
+    currentYPos += fallingSpeed;
     enemy->setYPos(currentYPos);
 }
-void moveXDirection(std::unique_ptr<Enemy>& enemy, float fallingSpeed){
+void moveXDirection(std::unique_ptr<Enemy>& enemy, float velocity){
     float currentXpos = enemy->getxPos();
-    currentXpos += fallingSpeed;
+    currentXpos += velocity;
     enemy->setXPos(currentXpos);
 }
 
 
 bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
-
     return CheckCollisionRecs(enemyRect, playerBulletRect);
 }
 
@@ -41,29 +41,31 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
     for (auto& row : enemyMatrix) {
         for (auto& enemyInMatrix : row) {
 
-            if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
-                mainPlayer.getBullet().reset();
-                enemyInMatrix.reset();
+            if(enemyInMatrix && enemyInMatrix->getYPos() >= HEIGHT){
 
-                if(IsSoundReady(killedEnemy)) {
-                    PlaySound(this->killedEnemy);
-                }else{
-                    std::cout << "nie dziala" << std::endl;
-                }
-
-                --this->numberOfEnemiesInMatrix;
-            } else if (enemyInMatrix) {
-                enemyInMatrix->Render();
-            }
-            else if(enemyInMatrix->getYPos() >= mainPlayer.getYPos()){
                 this->shouldTerminate = true;
-                std::cout << "koniec" << std::endl;
+                break;
             }
 
             if(enemyInMatrix && enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
 
                 this->shouldTerminate = true;
+                break;
             }
+            if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
+                mainPlayer.getBullet().reset();
+                enemyInMatrix.reset();
+
+
+                this->score += 100;
+                playGivenSound(this->killedEnemy);
+                --this->numberOfEnemiesInMatrix;
+
+
+            }else if (enemyInMatrix) {
+                enemyInMatrix->Render();
+            }
+
         }
     }
 }
@@ -90,7 +92,7 @@ void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
 
             if(enemy){
                 moveXDirection(enemy,vectorSense);
-                moveYDirection(enemy, 1.f);
+                moveYDirection(enemy, this->fallSpeed);
             }
         }
     }
@@ -100,7 +102,9 @@ void GamePanel::moveEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
 void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix, short numOfRows, short enemyNumber, float xPos, float yPos){
 
     this->numberOfEnemiesInMatrix = numOfRows * enemyNumber;
+    this->fallSpeed += 0.1f;
     static float startingXPos{20};
+
 
     Enemy enemy(0.f,0.f);
     xPos += startingXPos; 
@@ -113,7 +117,7 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
 
             row.emplace_back(std::make_unique<Enemy>(xPos, yPos));
             xPos += enemy.getWidth();
-        }
+         }
 
         yPos += enemy.getHeight(); 
         xPos = startingXPos; 
@@ -139,6 +143,10 @@ bool GamePanel::ShouldTerminate() const {
     return shouldTerminate;
 
 
+}
+
+int GamePanel::getScore() const {
+    return this->score;
 }
 
 

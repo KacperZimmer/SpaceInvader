@@ -7,7 +7,22 @@
 #include <memory>
 #include "raylib.h"
 
+void playGivenSound(Sound sound){
 
+    if(IsSoundReady(sound)){
+        PlaySound(sound);
+    }
+}
+
+void generateLoosingMsg(int score){
+
+
+    DrawText(TextFormat("You lost, you score: %08i", score), MIDDLEXPOS - 125, MIDDLEYPOS, 20, RED);
+
+    EndDrawing();
+    sleep(5);
+
+}
 void runGame(){
     InitWindow(WIDTH, HEIGHT, "SPACE INVADERS");
     Texture2D mainPlayerText = LoadTexture("../sprites/mainPlayerTxt.png");
@@ -29,7 +44,6 @@ void runGame(){
     gamePanel.initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
 
     while (!WindowShouldClose() ) {
-        // TODO put msg drawing logic into a function
         BeginDrawing();
         ClearBackground(BLACK);
 
@@ -42,19 +56,13 @@ void runGame(){
 
             }else{
                 ++numRows;
-
             }
 
 
             gamePanel.initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
         }
         if(gamePanel.ShouldTerminate()){
-            char* textLoosing = "YOU lost ! ";
-
-            DrawText(textLoosing, MIDDLEXPOS - 50, MIDDLEYPOS, 20, RED);
-
-            EndDrawing();
-            sleep(5);
+            generateLoosingMsg(gamePanel.getScore());
             break;
         }
 
