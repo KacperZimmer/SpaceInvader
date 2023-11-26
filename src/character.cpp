@@ -13,6 +13,9 @@ void Character::setYPos(float yPos){
 void Character::setHeight(float height){
     this->height = height; 
 }
+float Character::getYPos() const {
+    return this->yPos;
+}
 
 void Character::setWidth(float width){
     this->width = width; 

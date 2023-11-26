@@ -36,10 +36,12 @@ void runGame(){
 
         if(gamePanel.getNumberOfEnemiesInMatrix() == 0){
 
-            ++numRows;
 
             if(numRows % 5 == 0 ){
                 ++numCols;
+
+            }else{
+                ++numRows;
 
             }
 
