@@ -12,7 +12,9 @@ bool detectCollisionWithPlayerBullet(Rectangle&& enemyRect, Rectangle&& playerBu
 
 bool detectCollisonWithEnemyBullet(Rectangle&& enemyRect, Rectangle&& playerBulletRect){
     return CheckCollisionRecs(enemyRect, playerBulletRect);
+
 }
+
 
 void GamePanel::prepareMatrix(std::vector<std::vector<std::unique_ptr<Enemy>>>& enemyMatrix,short numOfRows, short numOfEnemy){
 
@@ -36,9 +38,9 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
                 enemyInMatrix->Render();
             }
 
-            if(enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
+            if(enemyInMatrix && enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
+
                 this->shouldTerminate = true;
-                std::cout << shouldTerminate << std::endl;
             }
 
         }
@@ -51,8 +53,9 @@ bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<
 
     for(auto& row : enemy){
         for(auto& enemySingle : row){
-            
-            if(enemySingle && enemySingle->getxPos() > WIDTH || enemySingle && enemySingle->getxPos() < 0) return true;
+
+
+            if(enemySingle && enemySingle->getxPos() > WIDTH - 55 || enemySingle && enemySingle->getxPos() < 0) return true;
         }
     }
 

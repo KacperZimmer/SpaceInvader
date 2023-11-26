@@ -20,8 +20,8 @@ void runGame(){
 
 
     std::vector<std::vector<std::unique_ptr<Enemy>>> enemyMatrix{};
-    int numRows = 3;
-    int numCols = 3;
+    int numRows = 5;
+    int numCols = 2;
 
 //    GamePanel::initizeEnemy(enemyMatrix,numCols,numRows,0.f,0.f);
 
