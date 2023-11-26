@@ -14,6 +14,12 @@ private:
     bool isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<std::unique_ptr<Enemy>>>& enemy);
     bool shouldTerminate{false};
     int numberOfEnemiesInMatrix{};
+    int score{};
+public:
+    int getScore() const;
+
+private:
+    float fallSpeed{};
     Sound killedEnemy{};
 
 
