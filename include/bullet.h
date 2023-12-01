@@ -13,7 +13,9 @@ private:
 public: 
     Bullet(float xPos, float yPos);
 
-    virtual Rectangle calcDestRect() override; 
+    virtual ~Bullet();
+
+    virtual Rectangle calcDestRect() override;
     virtual void Render() override;
     float getVelocity() const; 
     float getYPos() const; 

@@ -13,24 +13,12 @@ Bullet::Bullet(float xPos, float yPos){
 }
 
 Rectangle Bullet::calcDestRect(){
-    Rectangle rect{}; 
 
-    rect.x = this->xPos; 
-    rect.y = this->yPos; 
-    rect.width = this->width; 
-    rect.height = this->height; 
-    
-    return rect; 
+    return {this->xPos, this->yPos, this->width, this->height};
 }
 Rectangle Bullet::calcSourceRect(){
-    Rectangle rect{};
-        
-    rect.x = this->xPos; 
-    rect.y = this->yPos;
 
-    rect.width = this->width; 
-    rect.height = this->height; 
-    return rect; 
+    return {this->xPos, this->yPos, this->width, this->height};
 }
 
 float Bullet::getYPos()const{
@@ -43,5 +31,9 @@ float Bullet::getVelocity() const{
 
 void Bullet::Render(){
     DrawTexturePro(getBulletTexture(),calcSourceRect(),calcDestRect(),Vector2{},0.f, WHITE); 
+}
+
+Bullet::~Bullet() {
+    UnloadTexture(this->text);
 }
 
