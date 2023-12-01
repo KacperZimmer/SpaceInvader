@@ -28,6 +28,3 @@ float Character::getHeight()const{
     return this->height; 
 }
 
-Character::~Character(){
-    std::cout << "free resource" << std::endl; 
-}

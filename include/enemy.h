@@ -52,6 +52,9 @@ public:
     Enemy(float xPos, float yPos);
     Enemy();
 
+    ~Enemy();
+
+
 };
 
 

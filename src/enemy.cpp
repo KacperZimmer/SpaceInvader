@@ -63,21 +63,17 @@ void Enemy::handleBulletLogic(){
 
 
 Rectangle Enemy::calcDestRect(){
-    Rectangle rect{};
-    rect.x = this->xPos;
-    rect.y = this->yPos;
-    rect.height = this->height ;
-    rect.width = this->width / 2;
-    return rect;
+
+
+    return {this->xPos, this->yPos, this->width /2, this->height};
 }
 
 Rectangle Enemy::calcSourceRect(){
-   Rectangle rect{};
-    rect.x = this->text.width / 2 * this->currentFrame;
-    rect.y = 0.f;
-    rect.height = this->text.height;
-    rect.width = this->text.width / 2;
-    return rect;
+
+    float currentxPos = this->text.width / 2 * this->currentFrame;
+    float width = this->text.width / 2 - 10 ;
+    float height = this->text.height;
+    return {currentxPos, 0.f, width, height};
 }
 
 
@@ -113,6 +109,13 @@ void Enemy::Render(){
 
 const std::unique_ptr<Bullet> &Enemy::getBullet() const {
     return bullet;
+}
+
+Enemy::~Enemy() {
+
+        UnloadTexture(this->text);
+
+
 }
 
 
