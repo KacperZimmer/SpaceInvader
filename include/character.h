@@ -34,6 +34,5 @@ public:
     virtual float getYPos() const;
 
 
-    virtual ~Character(); 
-}; 
+};
 #endif

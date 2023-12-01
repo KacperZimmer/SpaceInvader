@@ -44,13 +44,13 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
             if(enemyInMatrix && enemyInMatrix->getYPos() >= HEIGHT){
 
                 this->shouldTerminate = true;
-                break;
+                return;
             }
 
             if(enemyInMatrix && enemyInMatrix->getBullet() && detectCollisonWithEnemyBullet(enemyInMatrix->getBullet()->calcDestRect(), mainPlayer.calcDestRect())){
 
                 this->shouldTerminate = true;
-                break;
+                return;
             }
             if (enemyInMatrix && mainPlayer.getBullet() && detectCollisionWithPlayerBullet(enemyInMatrix->calcDestRect(), mainPlayer.getBullet()->calcDestRect())) {
                 mainPlayer.getBullet().reset();
@@ -73,14 +73,12 @@ void GamePanel::drawEnemies(std::vector<std::vector<std::unique_ptr<Enemy>>>& en
 
 bool GamePanel::isEnemyMatrixOutOfBound(short numOfRows,std::vector<std::vector<std::unique_ptr<Enemy>>>& enemy){
 
-
     for(auto& row : enemy){
         for(auto& enemySingle : row){
 
             if(enemySingle && enemySingle->getxPos() > WIDTH - 50 || enemySingle && enemySingle->getxPos() < 0) return true;
         }
     }
-
     return false;
 }
 
@@ -104,7 +102,6 @@ void GamePanel::initizeEnemy(std::vector<std::vector<std::unique_ptr<Enemy>>>& e
     this->numberOfEnemiesInMatrix = numOfRows * enemyNumber;
     this->fallSpeed += 0.1f;
     static float startingXPos{20};
-
 
     Enemy enemy(0.f,0.f);
     xPos += startingXPos; 
@@ -131,8 +128,6 @@ GamePanel::GamePanel(int numOfRows, int numOfCols) {
 
     InitAudioDevice();
     this->killedEnemy = LoadSound("../sound/invaderkilled.wav");
-
-
 }
 
 int GamePanel::getNumberOfEnemiesInMatrix() const {
