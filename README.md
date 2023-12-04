@@ -24,7 +24,7 @@ Raylib can be installed following the instructions on the [raylib project page](
 3. Compile the code: `g++ -o space_invaders main.cpp -lraylib`
 4. Run the game: `./space_invaders`
 
-## Authors
+## Author
 
-- [Kacper Zimmer](https://github.com) - Role description in the project
+- [Kacper Zimmer](https://github.com) 
 
