@@ -10,7 +10,7 @@ This version of Space Invaders was created using the raylib library in C++. It's
 
 ### Requirements
 
-- C++ compiler
+- C++ 14+ 
 - raylib library (needs to be installed)
 
 ### Installing raylib
