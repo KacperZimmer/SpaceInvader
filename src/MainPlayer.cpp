@@ -14,24 +14,14 @@ MainPlayer::MainPlayer(Texture2D texture, float x, float y) {
 
 Rectangle MainPlayer::calcDestRect() {
 
-    Rectangle rect{};
-    rect.x = xPos;
-    rect.y = yPos;
-    rect.width = getWidth();
-    rect.height = getWidth();
 
-    return rect;
+    return {this->xPos, this->yPos, this->getWidth(), this->getHeight()};
 }
 
 Rectangle MainPlayer::calcSourceRect(){
 
-    Rectangle rect; 
-    rect.x = 0.f; 
-    rect.y = 0.f; 
-    rect.width = text.width; 
-    rect.height = text.height; 
 
-    return rect; 
+    return {0.f, 0.f, static_cast<float>(this->text.width), static_cast<float>(this->text.height)};
 }
 
 float MainPlayer::ChangeBulletTrajectory(){

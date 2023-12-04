@@ -73,6 +73,7 @@ Rectangle Enemy::calcSourceRect(){
     float currentxPos = this->text.width / 2 * this->currentFrame;
     float width = this->text.width / 2 - 10 ;
     float height = this->text.height;
+
     return {currentxPos, 0.f, width, height};
 }
 
@@ -115,7 +116,7 @@ Enemy::~Enemy() {
 
         UnloadTexture(this->text);
 
-
+        std::cout << "texture of enemy has been unloaded" << "\n";
 }
 
 
